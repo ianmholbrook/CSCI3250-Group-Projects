@@ -37,7 +37,7 @@ def scan_port(ip_address, port, timeout=1):
 
 
 
-def scan_ports(ip_address, start_port=1, end_port=1024, timeout=1):
+def scan_ports(ip_address, start_port=1, end_port=3400, timeout=1):
     """
     This function scans a range of TCP ports on the target IP address.
 
@@ -60,3 +60,15 @@ def scan_ports(ip_address, start_port=1, end_port=1024, timeout=1):
     #output the TCP open ports on the target
 
     #catch any errors. ex, no inputting the ip address of the target and inputting an non-reachable ip
+
+
+"""
+[*] Starting scan on host: 127.0.0.1
+[*]Scanning ports 1-3400…
+
+[+] Port 22 is open (SSH)
+[+] Port 3283 is open (Unknown service)
+
+[*] Scan completed in 0:00:00.110715
+
+"""
