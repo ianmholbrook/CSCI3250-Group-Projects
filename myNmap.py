@@ -56,6 +56,22 @@ def scan_ports(ip_address, start_port=1, end_port=3400, timeout=1):
             open_ports.append(port)
     return open_ports
 
+def check_ip(ip_address):
+    """
+    This function checks if the parameter's provided IP address is valid and reachable. Using the socket module's inet_aton() function
+
+    Args:
+        ip_address (str): The target IP address.
+
+    Returns:
+        bool: True if the IP address is valid, False otherwise.    
+    """
+    try:
+        socket.inet_aton(ip_address)
+        return True
+    except socket.error:
+        return False
+
 #def main():
     #output the TCP open ports on the target
 
@@ -64,11 +80,10 @@ def scan_ports(ip_address, start_port=1, end_port=3400, timeout=1):
 
 """
 [*] Starting scan on host: 127.0.0.1
-[*]Scanning ports 1-3400…
+[*] Scanning ports 1-3400…
 
 [+] Port 22 is open (SSH)
 [+] Port 3283 is open (Unknown service)
 
 [*] Scan completed in 0:00:00.110715
-
 """
