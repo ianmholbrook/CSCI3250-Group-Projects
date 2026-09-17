@@ -11,13 +11,14 @@ Course: Computer Security (CSCI 3250)
 #instead of using the nmap library, we can use Python's built-in library "socket" to help us create a TCP port scanner.
 import socket
 
-#I needed to import the sys module to allow command line arguments to be to be passed to the python program
+#importing the sys module allows for command line arguments to be to be passed to the python program
 import sys
 
-#
+#importing ipaddress module allows for validation of the provided IP address
 import ipaddress
 
-
+#we use the time library to measure the time taken for the scan to complete
+import time
 
 
 def scan_port(ip_address, port, timeout=1):
@@ -91,13 +92,14 @@ def check_ip(ip_address):
 
 def main(ip_address):
     """
-    This function checks if the parameter's provided IP address is valid and reachable. Using the socket module's inet_aton() function
+    The main function first checks if the provided IP address is valid by using the check_ip() function. 
+    If the IP address is valid, it will call the scan_ports() function to scan ports 1-3400 on the provided
+    IP address. The ports will be displayed along with their service. Lastly, it displayes the time taken for
+    the scan to complete
 
     Args:
         ip_address (str): The target IP address.
 
-    Returns:
-          
     """
     #Check if the given IP address is valid
     if check_ip(ip_address) != True:
@@ -107,6 +109,9 @@ def main(ip_address):
         #Show that the scan has started
         print(f'\n[*] Starting scan on host: {ip_address}')
         print(f'[*] Scanning ports 1-3400…\n')
+
+        #Begin the timer for the IP scan
+        start_time = time.time() 
 
         #Use the scan_ports() function to scan ports 1-3400 on the target IP address and store the return list of all open ports in a variable
         port_list = scan_ports(ip_address, 1, 3400)
@@ -120,24 +125,13 @@ def main(ip_address):
             print(f'[+] Port {port} is open ({service_name})')
 
         #Display the time taken for the scan
-        print(f'\n[*] Scan completed in {scan_ports.__code__.co_consts[1]}')  
+        print(f'\n[*] Scan completed in {time.time() - start_time:.2f} seconds.')  
 
 
-    
 """
-Output should look like this when the program is run with the command: 
-
-python3 myNmap.py 127.0.0.1
-
-[*] Starting scan on host: 127.0.0.1
-[*] Scanning ports 1-3400…
-
-[+] Port 22 is open (SSH)
-[+] Port 3283 is open (Unknown service)
-
-[*] Scan completed in 0:00:00.110715
+this statement is vital to the code being runable in terminal. 
+It allows the main() function to be called when someone types myNmap.py <target_ip_address> in cmd.
 """
-
 if __name__ == "__main__":
     # in argv: [0 is myNmap.py, 1 is the target IP address]
     main(sys.argv[1])
