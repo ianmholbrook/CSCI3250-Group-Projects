@@ -11,6 +11,13 @@ Course: Computer Security (CSCI 3250)
 #instead of using the nmap library, we can use Python's built-in library "socket" to help us create a TCP port scanner.
 import socket
 
+#I needed to import the sys module to allow command line arguments to be to be passed to the python program
+import sys
+
+#
+import ipaddress
+
+
 
 
 def scan_port(ip_address, port, timeout=1):
@@ -56,9 +63,10 @@ def scan_ports(ip_address, start_port=1, end_port=3400, timeout=1):
             open_ports.append(port)
     return open_ports
 
+
 def check_ip(ip_address):
     """
-    This function checks if the parameter's provided IP address is valid and reachable. Using the socket module's inet_aton() function
+    This function checks if the parameter's provided IP address is valid and reachable. Using the ipaddress module's ip_address() function
 
     Args:
         ip_address (str): The target IP address.
@@ -67,18 +75,60 @@ def check_ip(ip_address):
         bool: True if the IP address is valid, False otherwise.    
     """
     try:
-        socket.inet_aton(ip_address)
-        return True
-    except socket.error:
+        ip_type = ipaddress.ip_address(ip_address)
+
+    except ValueError:
         return False
 
-#def main():
-    #output the TCP open ports on the target
+    #check if the IP address is valid. Also, if it ends with a 0 (not valid)
+    if isinstance(ip_type, ipaddress.IPv4Address):
+        last_octet = int(ip_address.split('.')[-1])
 
-    #catch any errors. ex, no inputting the ip address of the target and inputting an non-reachable ip
+        if last_octet == 0:
+            return False
+        
+    return True
+
+def main(ip_address):
+    """
+    This function checks if the parameter's provided IP address is valid and reachable. Using the socket module's inet_aton() function
+
+    Args:
+        ip_address (str): The target IP address.
+
+    Returns:
+          
+    """
+    #Check if the given IP address is valid
+    if check_ip(ip_address) != True:
+        print(f'\n[*] Invalid IP address: {ip_address}')
+
+    else:
+        #Show that the scan has started
+        print(f'\n[*] Starting scan on host: {ip_address}')
+        print(f'[*] Scanning ports 1-3400…\n')
+
+        #Use the scan_ports() function to scan ports 1-3400 on the target IP address and store the return list of all open ports in a variable
+        port_list = scan_ports(ip_address, 1, 3400)
+
+        #Iterate and display open ports from scan_port()'s return list of all open ports
+        for port in port_list:
+            try:
+                service_name = socket.getservbyport(port)
+            except OSError:
+                service_name = "Unknown service"
+            print(f'[+] Port {port} is open ({service_name})')
+
+        #Display the time taken for the scan
+        print(f'\n[*] Scan completed in {scan_ports.__code__.co_consts[1]}')  
 
 
+    
 """
+Output should look like this when the program is run with the command: 
+
+python3 myNmap.py 127.0.0.1
+
 [*] Starting scan on host: 127.0.0.1
 [*] Scanning ports 1-3400…
 
@@ -87,3 +137,7 @@ def check_ip(ip_address):
 
 [*] Scan completed in 0:00:00.110715
 """
+
+if __name__ == "__main__":
+    # in argv: [0 is myNmap.py, 1 is the target IP address]
+    main(sys.argv[1])
