@@ -67,7 +67,8 @@ def scan_ports(ip_address, start_port=1, end_port=3400, timeout=1):
 
 def check_ip(ip_address):
     """
-    This function checks if the parameter's provided IP address is valid and reachable. Using the ipaddress module's ip_address() function
+    This function checks if the parameter's provided IP address is valid and reachable. 
+    Using the ipaddress module's ip_address() function
 
     Args:
         ip_address (str): The target IP address.
