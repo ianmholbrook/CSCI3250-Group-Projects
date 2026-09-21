@@ -8,6 +8,9 @@ Date: 9/15/2026
 Course: Computer Security (CSCI 3250)
 """
 
+#using ThreadPoolExecutor allows us to use multithreading to speed up the port scanning process so that we dont have to scan each port one by one
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 #instead of using the nmap library, we can use Python's built-in library "socket" to help us create a TCP port scanner.
 import socket
 
@@ -45,7 +48,7 @@ def scan_port(ip_address, port, timeout=1):
 
 
 
-def scan_ports(ip_address, start_port=1, end_port=3400, timeout=1):
+def scan_ports(ip_address, start_port=1, end_port=3400, timeout=1, max_threads=200):
     """
     This function scans a range of TCP ports on the target IP address.
 
@@ -54,15 +57,24 @@ def scan_ports(ip_address, start_port=1, end_port=3400, timeout=1):
         start_port (int, optional): The starting port number. Defaults to 1.
         end_port (int, optional): The ending port number. Defaults to 1024.
         timeout (int, optional): Timeout in seconds for each connection attempt. Defaults to 1.
-
+        max_threads (int, optional): Maximum number of threads to use for scanning. Defaults to 200.
+        
     Returns:
         list: A list of open ports.
     """
     open_ports = []
-    for port in range(start_port, end_port + 1):
-        if scan_port(ip_address, port, timeout):
-            open_ports.append(port)
-    return open_ports
+    ports = range(start_port, end_port + 1)
+
+    with ThreadPoolExecutor(max_workers=max_threads) as executor:
+        future_to_port = {executor.submit(scan_port, ip_address, port, timeout): port for port in ports}
+
+        for future in as_completed(future_to_port):
+            port = future_to_port[future]
+            
+            if future.result():
+                open_ports.append(port)
+            
+    return sorted(open_ports)
 
 
 def check_ip(ip_address):
