@@ -147,4 +147,7 @@ It allows the main() function to be called when someone types myNmap.py <target_
 """
 if __name__ == "__main__":
     # in argv: [0 is myNmap.py, 1 is the target IP address]
-    main(sys.argv[1])
+    if len(sys.argv) < 2 or not sys.argv[1].strip():
+        print("[*] No input entered")
+    else:
+        main(sys.argv[1])
