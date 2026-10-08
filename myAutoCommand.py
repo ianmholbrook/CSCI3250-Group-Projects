@@ -19,8 +19,8 @@ def run_command(cmd, output_file):
         This function will 
     
         Args:
-           cmd
-           output_file
+           cmd:
+           output_file (txt file): outfile_csci3250.txt
     
         Returns:
            
@@ -32,8 +32,8 @@ def ftp_commands(server, output_file):
         This function will 
     
         Args:
-           cmd
-           output_file
+           server:
+           output_file (txt file): outfile_csci3250.txt
     
         Returns:
            
@@ -44,9 +44,8 @@ def main():
         The main function
     
         Args:
-           cmd
-           output_file
-    
+            none
+
         Returns:
            
         """
