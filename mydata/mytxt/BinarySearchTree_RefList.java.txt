@@ -1,0 +1,272 @@
+package CSCI3200;
+import java.util.LinkedList;
+
+// --------------------------------------------------------------
+// Group Members: Ian Holbrook, Ben Rainey, & Jiovany Ortiz
+// Date: 4/25/2026
+// Course: Data Structures and Algorithm Analysis (CSCI 3200)
+// Project Description: Project #3: Implementing a Referenced-based Binary Search Tree.
+// --------------------------------------------------------------
+
+public class BinarySearchTree_RefList {
+	//Fields
+	protected Node<Integer> root = null; 
+	private int numNodes;
+
+	// Author: Ian Holbrook
+	// BinarySearchTree_RefList(): Default constructor
+	public BinarySearchTree_RefList() {
+		//initialize root to null and number of nodes to 0
+		root=null;
+		
+		numNodes=0;
+	}
+
+	// Author: Ben Rainey
+	// Second constructor
+	public BinarySearchTree_RefList(int element) {
+		root=new Node<Integer> (element, null, null, null);
+		numNodes=1;
+	}
+
+	// Author: Ian Holbrook
+	// isRoot(): returns true if the inputted value matches the value of the root
+	//   value - the value to check
+	public boolean isRoot(int value) {
+		//checks if the tree is empty
+		if(root==null) {
+			return false;
+		}
+
+		if(root.element==value)
+			return true;
+		else return false;
+	}
+
+	// Author: Ian Holbrook
+	// insert(): inserts a new node into the right position recursively
+	//		rt - the current subtree root
+	//	  prev - the parent of rt
+	//   value - the value to be inserted  
+	public Node<Integer> insert(Node<Integer> rt, Node<Integer> prev, int value) {
+		
+		//Base case
+		if(rt==null) {
+			Node<Integer> newNode = new Node<Integer>(value, null, null, prev);
+
+			//Insert the new node into the tree using its parent
+			if(prev!=null) {
+				if(value<prev.element) {
+					prev.left = newNode; 
+				}
+				else prev.right = newNode;	
+			}
+
+			numNodes++;
+			return newNode;
+		}
+
+		//check if duplicate
+		if(value==rt.element) {
+			System.out.println(value+" is a duplicate!");
+			return null;
+		}
+
+		//recurse into left subtree if value is <
+		if(value<rt.element) {
+			return insert(rt.left, rt, value);
+		}
+		//recurse into right subtree if value is >
+		else return insert(rt.right, rt, value);
+	}
+	
+	// Author: Ian Holbrook
+	// findNode(): finds a specific node by searching through the BST recursively
+	//		rt - the current subtree root
+	//   value - the value to be inserted  
+	// returns - will return the matching node or null if unfound 
+	public Node<Integer> findNode(Node<Integer> rt, int value) {
+		
+		//value is unfound
+		if(rt==null) {
+			return null;
+		}
+
+		// value is found
+		if(rt.element==value) {
+			return rt;
+		}
+
+		//search left subtree if value is <
+		if(value<rt.element) {
+			return findNode(rt.left, value);
+		}
+
+		//search right subtree if value is >
+		else { return findNode(rt.right, value);}
+	}
+
+	// Author: Ben Rainey
+	// find the maximum value in a subtree in the BST
+	public Node<Integer> findmax(Node<Integer> node) {
+		if(node == null) {
+			return null;
+		}
+
+		while(node.right != null) {
+			node = node.right;
+		}
+
+		return node;
+	}
+
+	// Author: Ben Rainey
+	// find the minimum value in a subtree in the BST
+	public Node<Integer> findmin(Node<Integer> node) {
+		if(node == null) {
+			return null;
+		}
+
+		while(node.left != null) {
+			node = node.left;
+		}
+
+		return node;
+	}
+
+	// Author: Ben Rainey
+	// remove an element from the BST
+	public int remove(Node<Integer> rt, int value) {
+		Node<Integer> nodeToRemove = findNode(rt, value);
+
+		if(rt == null || nodeToRemove == null) {
+		      return -1;
+		}
+
+		// Case 1: no children
+		if(nodeToRemove.left == null && nodeToRemove.right == null) {
+			if(nodeToRemove == root) {
+				root = null;
+			}
+			else if(nodeToRemove.parent.left == nodeToRemove) {
+				nodeToRemove.parent.left = null;
+			}
+			else {
+				nodeToRemove.parent.right = null;
+			}
+		}
+
+		// Case 2: only left child
+		else if(nodeToRemove.left != null && nodeToRemove.right == null) {
+			if(nodeToRemove == root) {
+				root = nodeToRemove.left;
+				root.parent = null;
+			}
+			else if(nodeToRemove.parent.left == nodeToRemove) {
+				nodeToRemove.parent.left = nodeToRemove.left;
+				nodeToRemove.left.parent = nodeToRemove.parent;
+			}
+			else {
+				nodeToRemove.parent.right = nodeToRemove.left;
+				nodeToRemove.left.parent = nodeToRemove.parent;
+			}
+		}
+
+		// Case 3: only right child
+		else if(nodeToRemove.left == null && nodeToRemove.right != null) {
+			if(nodeToRemove == root) {
+				root = nodeToRemove.right;
+				root.parent = null;
+			}
+			else if(nodeToRemove.parent.left == nodeToRemove) {
+				nodeToRemove.parent.left = nodeToRemove.right;
+				nodeToRemove.right.parent = nodeToRemove.parent;
+			}
+			else {
+				nodeToRemove.parent.right = nodeToRemove.right;
+				nodeToRemove.right.parent = nodeToRemove.parent;
+			}
+		}
+
+		// Case 4: two children
+		else {
+			Node<Integer> minNode = findmin(nodeToRemove.right);
+			nodeToRemove.element = minNode.element;
+
+			if(minNode.parent.left == minNode) {
+				minNode.parent.left = minNode.right;
+				if(minNode.right != null) {
+					minNode.right.parent = minNode.parent;
+				}
+			}
+			else {
+				minNode.parent.right = minNode.right;
+				if(minNode.right != null) {
+					minNode.right.parent = minNode.parent;
+				}
+			}
+		}
+
+		numNodes--;
+		return value;
+	}
+
+	// Author: Jiovany Ortiz
+	// children method: fills arr with the element values of the children of the node
+	// with the given value. 
+	public void children(int value, int[] myList) {
+		Node<Integer> node = findNode(root,value);
+		if (node == null) {
+			return;
+		} 
+
+		myList[0] = (node.left != null) ? node.left.element : 0;
+		myList[1] = (node.right != null) ? node.right.element : 0;
+	}
+
+
+	// Author: Jiovany Ortiz
+	// isLeaf method: returns true if the node with the given value has no children
+	public boolean isLeaf(int value) {
+		Node<Integer> node = findNode(root, value);
+		if (node == null) {
+			return false;
+		}
+		
+		return node.left == null && node.right == null;		
+	}
+
+
+	// Author: Jiovany Ortiz
+	// sibling: returns the sibling node of the node with the given value
+	public Node<Integer> sibling(int value) {
+		Node<Integer> node = findNode(root,value);
+		if (node == null || node.parent == null) {
+			return null;
+		}
+
+		Node<Integer> par = node.parent;
+		if (par.left == node) {
+			return par.right;
+		} else {
+			return par.left;
+		}
+	}
+
+
+	// Author: Jiovany Ortiz
+	// parent : returns the parent node of the node with the given value
+	public Node<Integer> parent(int value) {
+		Node<Integer> node = findNode(root,value);
+		if (node == null) {
+			return null;
+		}	
+	return node.parent;
+	}
+}
+
+
+
+
+
+

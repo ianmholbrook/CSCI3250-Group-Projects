@@ -38,7 +38,7 @@ def get_file_stats(filename):
     
     with open(filename, 'rb') as f:
         file_bytes = bytearray(f.read())
-    data = np.frombuffer(file_bytes, np.unit8)
+    data = np.frombuffer(file_bytes, np.uint8)
     return(np.mean(data), np.std(data))
 
 
@@ -47,7 +47,7 @@ def print_file_stats():
     This function prints the mean and standard deviation of the byte values for each file in the 'mydata' directory.
     """
 
-    print("File Stats: ")
+    print("\nFile Stats: ")
     for filetype in files:
         for filename in files[filetype]:
             mean, std = get_file_stats(f'mydata/{filetype}/{filename}')
@@ -80,7 +80,7 @@ def print_encrypted_stats():
     
         """
     
-    print("Encrypted File Stats: ")
+    print("\nEncrypted File Stats: ")
     for filetype in files:
         for filename in files[filetype]:
             mean, std = encrypt_and_stats(f'mydata/{filetype}/{filename}')

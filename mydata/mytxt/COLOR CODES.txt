@@ -1,0 +1,29 @@
+COLOR CODES:
+
+  --teal: #14939A;         /* logo teal, primary accent */
+  --light-green: #A1AE3A;  /* logo light green, secondary accent */
+  --dark-green: #565423;   /* logo dark green, tertiary accent */
+  --brown: #513A2C;        /* logo brown, tertiary accent */
+  --mustard: #B69141;      /* logo mustard, tertiary accent */
+  --white: #FFFFFF;        /* white, tertiary accent */
+  --off-white: #ECF0F1;    /* off-white, tertiary accent */
+  --dark-gray: #4C5758;	   /*dark gray, secondary accent */
+
+  --reveal-living: #6F937D;      /*reveal project, living wheel accent*/
+  --reveal-learning: #94B9A3;    /*reveal project, learning wheel accent*/
+  --reveal-loving: #C1D6C9;      /*reveal project, loving wheel accent*/
+  --reveal-leading: #497059;     /*reveal project, leading wheel accent*/
+  --reveal-dark-orange: #935100; /*reveal project, internal wheel accent*/
+  --reveal-light-orange:#E1803C; /*reveal project, external wheel accent*/
+
+Normal Text - Font:MYRIADPRO-LIGHT Weight:Normal Size:1.6em Line Height:2em Letter Spacing:-0.02em
+
+Page Title - Font:Museo_Slab_700 Weight:Normal Size:6em Line Height:1em Letter Spacing:-0.04em Text Transform: UPPERCASE 
+
+Heading - Font:Museo_Slab_700 Weight:Normal Size:4em Line Height:1em Letter Spacing:-0.04em 
+
+Subheading - Font:Museo_Slab_500 Weight:Normal Size:2em Line Height:1em Letter Spacing:-0.04em  
+
+Buttons - Font:MYRIADPRO-LIGHT Weight:Normal Size:1.5em Letter Spacing:0.08em Text Transform:UPPERCASE 
+
+Image Title -Font:MYRIADPRO-LIGHT Weight:Normal Letter Spacing:0em 
