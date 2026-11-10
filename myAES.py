@@ -1,6 +1,6 @@
 """
 myAES.py
-Program Description: Project #3: File Encryption and Statistical Analysis of both plaintext and cyphertext files 
+Program Description: Project #3: File Encryption and Statistical Analysis of both plaintext and ciphertext files 
 Program Usage: python3 myAES.py 
 
 Group Members: Ian Holbrook & Cole Faulk
@@ -33,7 +33,9 @@ def get_file_stats(filename):
 
     Args:
         filename (str): the path to the file to be analyzed
-        
+    
+    Returns:
+        tuple: the mean and standard deviation of the byte values
         """
     
     with open(filename, 'rb') as f:
@@ -60,6 +62,9 @@ def encrypt_and_stats(filename):
     
     Args:
         filename (str): the path to the file to be encrypted
+
+    Returns:
+        tuple: the mean and standard deviation of the encrypted byte values
         
         """
     
@@ -70,7 +75,7 @@ def encrypt_and_stats(filename):
     aes_cipher = Cipher(algorithms.AES(key), modes.GCM(iv))
     encryptor = aes_cipher.encryptor()
     ciphertext = encryptor.update(file_bytes) + encryptor.finalize()
-    data = np.frombuffer(file_bytes, np.uint8)
+    data = np.frombuffer(ciphertext, np.uint8)
     return(np.mean(data), np.std(data))
 
 
