@@ -91,6 +91,7 @@ def print_encrypted_stats():
             mean, std = encrypt_and_stats(f"mydata/{filetype}/{filename}")
             print(f"{filename}: Mean={mean:.4f}, Std={std:.4f}")
 
+
 def encrypt_decrypt_verify(filename):
     """
     This function encrypts a file with AES-GCM, saves the encrypted binary file,
